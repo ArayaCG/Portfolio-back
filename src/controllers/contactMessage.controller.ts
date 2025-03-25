@@ -15,7 +15,20 @@ export const getMessages = async (req: Request, res: Response) => {
 export const createMessage = async (req: Request, res: Response) => {
     try {
         const { name, email, message } = req.body;
-        const newMessage: ContactMessage = await createContactMessageService({ name, email, message });
+
+        const userIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "0.0.0.0";
+
+        const newMessage: ContactMessage | null = await createContactMessageService(
+            { name, email, message },
+            userIp as string
+        );
+
+        if (newMessage === null) {
+            return res.status(429).json({
+                message: "Has alcanzado el límite de mensajes. Intenta de nuevo más tarde.",
+            });
+        }
+
         res.status(201).json(newMessage);
     } catch (error) {
         console.error("Error creating message:", error);

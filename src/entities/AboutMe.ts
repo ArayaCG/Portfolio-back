@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
-    name: "contactMessages",
+    name: "aboutMe",
 })
-export class ContactMessage {
+export class AboutMe {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -15,10 +15,15 @@ export class ContactMessage {
     @Column({
         length: 100,
     })
-    email: string;
+    rol: string;
 
     @Column()
-    message: string;
+    description: string;
+
+    @Column({
+        length: 100,
+    })
+    image: string;
 
     @CreateDateColumn()
     created_at: Date;

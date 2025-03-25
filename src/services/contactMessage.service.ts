@@ -3,6 +3,7 @@ import transporter from "../config/nodemailer";
 import ContactMessageDto from "../dto/contactMessage.dto";
 import { ContactMessage } from "../entities/ContactMessage";
 import ContactMessageRepository from "../repositories/ContactMessage.repository";
+import redis from "../config/redisClient";
 
 export const getContactMessagesService = async (): Promise<ContactMessage[]> => {
     try {
@@ -14,15 +15,28 @@ export const getContactMessagesService = async (): Promise<ContactMessage[]> => 
     }
 };
 
-export const createContactMessageService = async (messageData: ContactMessageDto): Promise<ContactMessage> => {
+export const createContactMessageService = async (
+    messageData: ContactMessageDto,
+    userIp: string
+): Promise<ContactMessage | null> => {
     try {
+        const messageCountKey = `contact_messages:${userIp}`;
+        const currentCount = await redis.incr(messageCountKey);
+
+        if (currentCount === 1) {
+            await redis.expire(messageCountKey, 3600);
+        }
+
+        if (currentCount > 3) {
+            throw new Error("Limit exceeded: Too many messages from this IP");
+        }
+
         const contactMessage = ContactMessageRepository.create(messageData);
         const result = await ContactMessageRepository.save(contactMessage);
-
         await transporter.sendMail({
-            from: EMAIL_USER, 
-            to: EMAIL_USER, 
-            subject: 'Nuevo mensaje de contacto recibido',
+            from: EMAIL_USER,
+            to: EMAIL_USER,
+            subject: "Nuevo mensaje de contacto recibido",
             text: `Has recibido un nuevo mensaje de contacto:\n\nNombre: ${messageData.name}\nEmail: ${messageData.email}\nMensaje: ${messageData.message}`,
         });
 

@@ -3,8 +3,7 @@ import { createMessage, getMessages } from "../controllers/contactMessage.contro
 
 const contactMessageRoute: Router = Router();
 
-contactMessageRoute.get("/", getMessages)
-contactMessageRoute.post("/", createMessage)
-
+contactMessageRoute.get("/", getMessages);
+contactMessageRoute.post("/", createMessage);
 
 export default contactMessageRoute;

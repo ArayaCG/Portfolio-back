@@ -1,7 +1,7 @@
-interface ContactMessageDto{
-    name: string,
-    email: string,
-    message: string,
+interface ContactMessageDto {
+    name: string;
+    email: string;
+    message: string;
 }
 
-export default ContactMessageDto
+export default ContactMessageDto;

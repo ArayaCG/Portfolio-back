@@ -1,16 +1,16 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
-    name: "contactMessages",
+    name: "admin",
 })
-export class ContactMessage {
+export class Admin {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
         length: 100,
     })
-    name: string;
+    username: string;
 
     @Column({
         length: 100,
@@ -18,8 +18,8 @@ export class ContactMessage {
     email: string;
 
     @Column()
-    message: string;
+    password: string;
 
-    @CreateDateColumn()
-    created_at: Date;
+    @Column()
+    token: string;
 }

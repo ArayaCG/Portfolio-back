@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import {
-    createProjectService,
-    getProjectsService,
-    deleteProjectService,
-} from "../services/project.service";
+import { createProjectService, getProjectsService, deleteProjectService } from "../services/project.service";
 import { Project } from "../entities/Project";
 
 export const getProjects = async (req: Request, res: Response) => {
@@ -32,11 +28,10 @@ export const createProject = async (req: Request, res: Response) => {
     }
 };
 
-
 export const deleteProject = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params; 
-        await deleteProjectService(Number(id)); 
+        const { id } = req.params;
+        await deleteProjectService(Number(id));
         res.status(200).json({ message: "Project deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: "Error deleting project", error });

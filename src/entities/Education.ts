@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
-    name: "contactMessages",
+    name: "education",
 })
-export class ContactMessage {
+export class Education {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -12,14 +12,9 @@ export class ContactMessage {
     })
     name: string;
 
-    @Column({
-        length: 100,
-    })
-    email: string;
+    @Column()
+    description: string;
 
     @Column()
-    message: string;
-
-    @CreateDateColumn()
-    created_at: Date;
+    year: number;
 }

@@ -1,7 +1,7 @@
 import ProjectDto from "../dto/project.dto";
 import { Project } from "../entities/Project";
-import ProjectRepository from "../repositories/Project.repository";
-import cloudinary from "../config/cloudinary.config";
+import { ProjectRepository } from "../repositories/Project.repository";
+import { uploadToCloudinary } from "../helpers/uploadImage";
 
 export const getProjectsService = async (): Promise<Project[]> => {
     const projects = await ProjectRepository.find();
@@ -20,11 +20,11 @@ export const createProjectService = async (
     imageFile: Express.Multer.File
 ): Promise<Project> => {
     try {
-        const result = await cloudinary.v2.uploader.upload(imageFile.path);
+        const imageUrl = await uploadToCloudinary(imageFile.path);
 
         const newProject = ProjectRepository.create({
             ...projectData,
-            image_url: result.secure_url,
+            image_url: imageUrl,
         });
 
         const savedProject = await ProjectRepository.save(newProject);

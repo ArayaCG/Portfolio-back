@@ -1,10 +1,13 @@
 import bcrypt from "bcryptjs";
-import { AdminRepository } from "../repositories/Admin.repository";
+import { AppDataSource } from "../config/data-source";
+import { Admin } from "../entities/Admin";
 import { generateAdminToken } from "../config/auth";
 
 export class AuthService {
+    private adminRepository = AppDataSource.getRepository(Admin);
+
     async login(identifier: string, password: string) {
-        const admin = await AdminRepository.findOne({
+        const admin = await this.adminRepository.findOne({
             where: [{ email: identifier }, { username: identifier }],
         });
 
@@ -21,13 +24,13 @@ export class AuthService {
         const token = generateAdminToken();
 
         admin.token = token;
-        await AdminRepository.save(admin);
+        await this.adminRepository.save(admin);
 
         return { token };
     }
 
     async createInitialAdmin(username: string, email: string, password: string) {
-        const existingAdmin = await AdminRepository.findOne({
+        const existingAdmin = await this.adminRepository.findOne({
             where: [{ email }, { username }],
         });
 
@@ -37,14 +40,14 @@ export class AuthService {
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const admin = AdminRepository.create({
+        const admin = this.adminRepository.create({
             username,
             email,
             password: hashedPassword,
             token: generateAdminToken(),
         });
 
-        await AdminRepository.save(admin);
+        await this.adminRepository.save(admin);
 
         return admin;
     }

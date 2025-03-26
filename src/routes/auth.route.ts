@@ -1,16 +1,21 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.controller";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Endpoints de autenticación
+ */
 const authRouter = Router();
 const authController = new AuthController();
 
 /**
- * @openapi
+ * @swagger
  * /auth/login:
  *   post:
- *     summary: Login de administrador
- *     tags:
- *       - Authentication
+ *     summary: Iniciar sesión y obtener un token JWT
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -20,14 +25,25 @@ const authController = new AuthController();
  *             properties:
  *               identifier:
  *                 type: string
- *                 description: Email o username del admin
+ *                 description: Nombre de usuario o correo electrónico
+ *                 example: "usuario123"
  *               password:
  *                 type: string
+ *                 description: Contraseña del usuario (mínimo 8 caracteres)"
+ *                 minLength: 8
  *     responses:
  *       200:
- *         description: Login exitoso
+ *         description: Token generado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
- *         description: Credenciales inválidas
+ *         description: Credenciales incorrectas
  */
 authRouter.post("/login", (req, res) => authController.login(req, res));
 

@@ -2,24 +2,26 @@ import { AppDataSource } from "../config/data-source";
 import { generateAdminToken } from "../config/auth";
 import { USERNAME_ADMIN, PASSWORD_ADMIN } from "../config/envs";
 import bcrypt from "bcryptjs";
-import { Repository } from "typeorm";
 import { Admin } from "../entities/Admin";
 
 export const initializeAdmin = async () => {
     try {
-        const adminRepository: Repository<Admin> = AppDataSource.getRepository("Admin");
+        const adminRepository = AppDataSource.getRepository(Admin);
 
         const existingAdmin = await adminRepository.findOne({
             where: { username: USERNAME_ADMIN },
         });
+
         if (!PASSWORD_ADMIN) {
             throw new Error("PASSWORD_ADMIN no está definido en las variables de entorno.");
         }
+
         const hashedPassword = await hashPassword(PASSWORD_ADMIN);
 
         if (!existingAdmin) {
             const admin = adminRepository.create({
                 username: USERNAME_ADMIN,
+                email: `${USERNAME_ADMIN}@admin.com`,
                 password: hashedPassword,
                 token: generateAdminToken(),
             });

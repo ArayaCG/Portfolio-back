@@ -1,6 +1,7 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Router } from "express";
+import { Type } from "../enum/type.enum";
 
 const swaggerOptions = {
     definition: {
@@ -64,21 +65,13 @@ const swaggerOptions = {
                     properties: {
                         id: { type: "number", readOnly: true },
                         name: { type: "string", maxLength: 100 },
-                        image: { type: "string", maxLength: 100 },
                         description: { type: "string" },
-                        type: { type: "string" },
-                        url: { type: "string" },
-                        year: { type: "number" },
-                    },
-                },
-                Project: {
-                    type: "object",
-                    properties: {
-                        id: { type: "number", readOnly: true },
-                        name: { type: "string", maxLength: 36 },
-                        description: { type: "string" },
-                        url: { type: "string" },
-                        image_url: { type: "string" },
+                        technologies: { type: "string" },
+                        date: { type: "string" },
+                        url_deploy: { type: "string" },
+                        image_url: { type: "string", maxLength: 100 },
+                        logo_url: { type: "string", maxLength: 100 },
+                        type: { type: Type },
                     },
                 },
                 Skills: {

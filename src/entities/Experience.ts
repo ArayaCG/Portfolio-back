@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Type } from "../enum/type.enum";
 
 @Entity({
     name: "experience",
@@ -8,24 +9,28 @@ export class Experience {
     id: number;
 
     @Column({
-        length: 100,
+        length: 36,
     })
     name: string;
-
-    @Column({
-        length: 100,
-    })
-    image: string;
 
     @Column()
     description: string;
 
     @Column()
-    type: string;
+    technologies: string;
 
     @Column()
-    url: string;
+    date: string;
 
     @Column()
-    year: number;
+    url_deploy: string;
+
+    @Column()
+    image_url: string;
+
+    @Column()
+    logo_url: string;
+
+    @Column({ type: "enum", enum: Type })
+    type: Type;
 }

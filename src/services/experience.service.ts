@@ -1,11 +1,10 @@
-import { uploadToCloudinary } from "../helpers/uploadImage";
+import CloudinaryService from "../helpers/cloudinary.service";
 import redis from "../config/redisClient";
 import { Experience } from "../entities/Experience";
 import { ExperienceRepository } from "../repositories/experience.repository";
-import ExperienceDto from "../dto/experience.dto";
+import { ExperienceDto } from "../dto/experience.dto";
 import { Type } from "../enum/type.enum";
-import * as fs from 'fs';
-import path from 'path';
+import * as fs from "fs";
 
 export class ExperienceService {
     private readonly EXPERIENCE_CACHE_KEY = "portfolio:experience";
@@ -26,6 +25,13 @@ export class ExperienceService {
         }
     }
 
+    async invalidateExperiencesCache(): Promise<void> {
+        try {
+            await redis.del(this.EXPERIENCE_CACHE_KEY);
+        } catch (error) {
+            console.error("Error invalidando caché de experiencias:", error);
+        }
+    }
     async getExperienceById(id: number): Promise<Experience | null> {
         try {
             const cacheKey = `portfolio:experience:${id}`;
@@ -42,14 +48,6 @@ export class ExperienceService {
         }
     }
 
-    async invalidateExperiencesCache(): Promise<void> {
-        try {
-            await redis.del(this.EXPERIENCE_CACHE_KEY);
-        } catch (error) {
-            console.error("Error invalidando caché de experiencias:", error);
-        }
-    }
-
     async invalidateExperienceCache(id: number): Promise<void> {
         try {
             await redis.del(`portfolio:experience:${id}`);
@@ -63,36 +61,25 @@ export class ExperienceService {
             if (!files || files.length < 1) {
                 throw new Error("Se requiere al menos una imagen");
             }
-    
-            const validFiles = files.filter(file => 
-                file && file.path && fs.existsSync(file.path)
-            );
-    
+
+            const validFiles = files.filter((file) => file && file.path && fs.existsSync(file.path));
+
             if (validFiles.length < 1) {
                 throw new Error("No se encontraron archivos válidos");
             }
-    
-            const imageUrls = await Promise.all(
-                validFiles.map(async (file) => {
-                    try {
-                        return await uploadToCloudinary(file.path);
-                    } catch (uploadError) {
-                        console.error("Error uploading file:", uploadError);
-                        throw new Error("No se pudo subir la imagen");
-                    }
-                })
-            );
-    
+
+            const imageUrls = await CloudinaryService.uploadImages(validFiles.map((file) => file.path));
+
             const newExperience = ExperienceRepository.create({
                 ...experienceData,
                 type: experienceData.type.toLowerCase() as Type,
                 image_url: imageUrls[0],
                 logo_url: imageUrls.length > 1 ? imageUrls[1] : imageUrls[0],
             });
-    
+
             await ExperienceRepository.save(newExperience);
             await this.invalidateExperiencesCache();
-    
+
             return { message: "Experiencia creada con éxito" };
         } catch (error) {
             console.error("Error creando experiencia:", error);
@@ -110,7 +97,8 @@ export class ExperienceService {
             if (!existingExperience) throw new Error("Experiencia no encontrada");
 
             if (images && images.length) {
-                const imageUrls = await Promise.all(images.map((file) => uploadToCloudinary(file.path)));
+                const imageUrls = await CloudinaryService.uploadImages(images.map((file) => file.path));
+
                 experienceData.logo_url = imageUrls[0] || existingExperience.logo_url;
                 experienceData.image_url = imageUrls[1] || existingExperience.image_url;
             }
@@ -130,6 +118,11 @@ export class ExperienceService {
         try {
             const experience = await this.getExperienceById(id);
             if (!experience) throw new Error("Experiencia no encontrada");
+
+            const imagesToDelete = [experience.image_url, experience.logo_url].filter((url) => url);
+            if (imagesToDelete.length) {
+                await CloudinaryService.deleteImages(imagesToDelete);
+            }
 
             await ExperienceRepository.remove(experience);
             await this.invalidateExperiencesCache();

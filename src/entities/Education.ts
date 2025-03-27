@@ -17,4 +17,7 @@ export class Education {
 
     @Column()
     year: number;
+
+    @Column()
+    image_url: string;
 }

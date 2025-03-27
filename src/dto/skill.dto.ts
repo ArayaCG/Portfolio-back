@@ -1,18 +1,17 @@
-import { IsString, IsNotEmpty, IsEmail, MaxLength } from "class-validator";
+import { IsString, IsNotEmpty, MaxLength } from "class-validator";
 
-export class ContactMessageDto {
+export class SkillDto {
     @IsString()
     @IsNotEmpty()
     @MaxLength(100)
     name: string;
 
     @IsString()
-    @IsEmail()
     @IsNotEmpty()
     @MaxLength(100)
-    email: string;
+    image: string;
 
     @IsString()
     @IsNotEmpty()
-    message: string;
+    description: string;
 }

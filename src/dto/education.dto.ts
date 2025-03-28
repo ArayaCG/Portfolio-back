@@ -10,9 +10,9 @@ export class EducationDto {
     @IsNotEmpty()
     description: string;
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    year: number;
+    year: string;
 
     @IsString()
     @IsUrl()

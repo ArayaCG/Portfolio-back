@@ -5,7 +5,7 @@ import { CloudinaryService } from "../helpers/cloudinary.service";
 import { AboutMeRepository } from "../repositories/aboutMe.repository";
 
 export class AboutMeService {
-    private readonly ABOUT_ME_CACHE_KEY = "portfolio:aboutMe";
+    private readonly ABOUT_ME_CACHE_KEY = "portfolio:about-me:single";
     private readonly ABOUT_ME_CACHE_EXPIRATION = 3600;
 
     async getAboutMe(): Promise<AboutMe | null> {
@@ -40,7 +40,7 @@ export class AboutMeService {
         try {
             await redis.del(this.ABOUT_ME_CACHE_KEY);
         } catch (error) {
-            console.error("Error invalidando caché de experiencias:", error);
+            console.error("Error invalidando caché de About Me:", error);
         }
     }
 
@@ -68,12 +68,9 @@ export class AboutMeService {
             const existingAboutMe = await this.getAboutMe();
             if (!existingAboutMe) throw new Error("About Me no encontrado");
 
-            // Si se sube una nueva imagen
             if (file) {
-                // Subir nueva imagen
                 const imageUrl = await CloudinaryService.uploadImage(file.path);
 
-                // Si ya existía una imagen, eliminar la anterior de Cloudinary
                 if (existingAboutMe.image) {
                     await CloudinaryService.deleteImage(existingAboutMe.image);
                 }
@@ -94,7 +91,7 @@ export class AboutMeService {
     async deleteAboutMe(): Promise<{ message: string }> {
         try {
             const aboutMe = await this.getAboutMe();
-            if (!aboutMe) throw new Error("about me no encontrado");
+            if (!aboutMe) throw new Error("About me no encontrado");
 
             if (aboutMe.image) {
                 await CloudinaryService.deleteImage(aboutMe.image);
@@ -105,8 +102,10 @@ export class AboutMeService {
 
             return { message: "About me eliminado con éxito" };
         } catch (error) {
-            console.error(`Error eliminando about me `, error);
+            console.error(`Error eliminando about me`, error);
             throw new Error("No se pudo eliminar about me.");
         }
     }
 }
+
+export const aboutMeService = new AboutMeService();

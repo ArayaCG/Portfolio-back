@@ -16,7 +16,7 @@ export class Education {
     description: string;
 
     @Column()
-    year: number;
+    year: string;
 
     @Column()
     image_url: string;

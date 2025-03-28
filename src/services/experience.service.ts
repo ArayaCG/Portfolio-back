@@ -7,50 +7,61 @@ import { Type } from "../enum/type.enum";
 import * as fs from "fs";
 
 export class ExperienceService {
-    private readonly EXPERIENCE_CACHE_KEY = "portfolio:experience";
+    private readonly EXPERIENCE_LIST_CACHE_KEY = "portfolio:experiences:list";
+    private readonly EXPERIENCE_ITEM_CACHE_PREFIX = "portfolio:experiences:item:";
     private readonly EXPERIENCE_CACHE_EXPIRATION = 3600;
 
     async getExperiences(): Promise<Experience[] | null> {
         try {
-            const cachedExperiences = await redis.get(this.EXPERIENCE_CACHE_KEY);
+            const cachedExperiences = await redis.get(this.EXPERIENCE_LIST_CACHE_KEY);
             if (cachedExperiences) return JSON.parse(cachedExperiences);
 
             const experiences = await ExperienceRepository.find();
-            await redis.setex(this.EXPERIENCE_CACHE_KEY, this.EXPERIENCE_CACHE_EXPIRATION, JSON.stringify(experiences));
+            await redis.setex(
+                this.EXPERIENCE_LIST_CACHE_KEY,
+                this.EXPERIENCE_CACHE_EXPIRATION,
+                JSON.stringify(experiences)
+            );
 
             return experiences;
         } catch (error) {
             console.error("Error obteniendo experiencias con caché:", error);
-            return await ExperienceRepository.find();
+            const experiencesResults = await ExperienceRepository.find();
+            return experiencesResults.length > 0 ? experiencesResults : null;
         }
     }
 
     async invalidateExperiencesCache(): Promise<void> {
         try {
-            await redis.del(this.EXPERIENCE_CACHE_KEY);
+            await redis.del(this.EXPERIENCE_LIST_CACHE_KEY);
         } catch (error) {
             console.error("Error invalidando caché de experiencias:", error);
         }
     }
+
     async getExperienceById(id: number): Promise<Experience | null> {
         try {
-            const cacheKey = `portfolio:experience:${id}`;
+            const cacheKey = `${this.EXPERIENCE_ITEM_CACHE_PREFIX}${id}`;
             const cachedExperience = await redis.get(cacheKey);
             if (cachedExperience) return JSON.parse(cachedExperience);
 
             const experience = await ExperienceRepository.findOne({ where: { id } });
-            if (experience) await redis.setex(cacheKey, this.EXPERIENCE_CACHE_EXPIRATION, JSON.stringify(experience));
+            if (experience) {
+                await redis.setex(cacheKey, this.EXPERIENCE_CACHE_EXPIRATION, JSON.stringify(experience));
+            }
 
             return experience;
         } catch (error) {
             console.error(`Error obteniendo experiencia ${id} con caché:`, error);
-            return await ExperienceRepository.findOne({ where: { id } });
+            const experienceResult = await ExperienceRepository.findOne({ where: { id } });
+            return experienceResult ?? null;
         }
     }
 
     async invalidateExperienceCache(id: number): Promise<void> {
         try {
-            await redis.del(`portfolio:experience:${id}`);
+            const cacheKey = `${this.EXPERIENCE_ITEM_CACHE_PREFIX}${id}`;
+            await redis.del(cacheKey);
         } catch (error) {
             console.error(`Error invalidando caché de experiencia ${id}:`, error);
         }
@@ -98,7 +109,10 @@ export class ExperienceService {
 
             if (images && images.length) {
                 const imageUrls = await CloudinaryService.uploadImages(images.map((file) => file.path));
-
+                const imagesToDelete = [existingExperience.image_url, existingExperience.logo_url].filter((url) => url);
+                if (imagesToDelete.length) {
+                    await CloudinaryService.deleteImages(imagesToDelete);
+                }
                 experienceData.logo_url = imageUrls[0] || existingExperience.logo_url;
                 experienceData.image_url = imageUrls[1] || existingExperience.image_url;
             }

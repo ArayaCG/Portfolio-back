@@ -1,6 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import { getAboutMe, createAboutMe, updateAboutMe, deleteAboutMe } from "../controllers/aboutMe.controller";
+import { verifyToken } from "../middlewares/auth.middleware";
 
 const upload = multer({ dest: "uploads/" });
 
@@ -62,7 +63,7 @@ aboutMeRoute.get("/", getAboutMe);
  *       500:
  *         description: Error en el servidor
  */
-aboutMeRoute.post("/", upload.single("image"), createAboutMe);
+aboutMeRoute.post("/", verifyToken, upload.single("image"), createAboutMe);
 
 /**
  * @swagger
@@ -89,7 +90,7 @@ aboutMeRoute.post("/", upload.single("image"), createAboutMe);
  *       500:
  *         description: Error en el servidor
  */
-aboutMeRoute.put("/", upload.single("image"), updateAboutMe);
+aboutMeRoute.put("/", verifyToken, upload.single("image"), updateAboutMe);
 
 /**
  * @swagger
@@ -103,6 +104,6 @@ aboutMeRoute.put("/", upload.single("image"), updateAboutMe);
  *       500:
  *         description: Error en el servidor
  */
-aboutMeRoute.delete("/", deleteAboutMe);
+aboutMeRoute.delete("/", verifyToken, deleteAboutMe);
 
 export default aboutMeRoute;

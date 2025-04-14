@@ -1,6 +1,4 @@
-FROM node:slim
-
-RUN npm install -g ts-node
+FROM node:23-slim
 
 WORKDIR /src/app
 

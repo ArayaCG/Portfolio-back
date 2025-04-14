@@ -7,11 +7,14 @@ WORKDIR /app
 # Copiar package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar dependencias (incluye las de desarrollo por ahora)
+# Instalar todas las dependencias (incluidas las de desarrollo)
 RUN npm install
 
 # Copiar el resto del código
 COPY . .
+
+# Establecer NODE_ENV para producción
+ENV NODE_ENV=production
 
 # Compilar el código TypeScript
 RUN npm run build

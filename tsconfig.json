@@ -1,27 +1,24 @@
 {
     "compilerOptions": {
-        "target": "ES2021",
-        "module": "NodeNext",
-        "rootDir": "./src",
-        "outDir": "./dist",
-        "lib": ["ES2021"],
-        "types": ["node"],
-        "strict": true,
-        "strictPropertyInitialization": false,
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipLibCheck": true,
-        "moduleResolution": "NodeNext",
-        "baseUrl": "./src",
-        "paths": {
-            "@/*": ["*"]
-        },
-        "sourceMap": true,
-        "typeRoots": ["./node_modules/@types"]
-    },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"]
-}
+      "module": "commonjs",
+      "declaration": true,
+      "removeComments": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "ES2021",
+      "sourceMap": true,
+      "outDir": "./dist",
+      "baseUrl": "./",
+      "incremental": true,
+      "skipLibCheck": true,
+      "strictNullChecks": false,
+      "noImplicitAny": false,
+      "strictBindCallApply": false,
+      "forceConsistentCasingInFileNames": false,
+      "noFallthroughCasesInSwitch": false,
+      "types": ["multer"],
+      "resolveJsonModule": true,
+    }
+  }
+  

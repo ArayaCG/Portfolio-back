@@ -4,7 +4,7 @@ import { Experience } from "../entities/Experience";
 import { ExperienceDto } from "../dto/experience.dto";
 import { Type } from "../enum/type.enum";
 import * as fs from "fs";
-import ExperienceRepository from "@/repositories/experience.repository";
+import ExperienceRepository from "src/repositories/experience.repository";
 
 export class ExperienceService {
     private readonly EXPERIENCE_LIST_CACHE_KEY = "portfolio:experiences:list";

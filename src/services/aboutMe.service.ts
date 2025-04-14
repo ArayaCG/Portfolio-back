@@ -1,4 +1,4 @@
-import AboutMeRepository from "@/repositories/aboutMe.repository";
+import AboutMeRepository from "src/repositories/aboutMe.repository";
 import redis from "../config/redisClient";
 import { AboutMeDto } from "../dto/aboutMe.dto";
 import { AboutMe } from "../entities/AboutMe";

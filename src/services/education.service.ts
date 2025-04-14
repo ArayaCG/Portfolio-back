@@ -1,4 +1,4 @@
-import EducationRepository from "@/repositories/education.repository";
+import EducationRepository from "src/repositories/education.repository";
 import redis from "../config/redisClient";
 import { EducationDto } from "../dto/education.dto";
 import { Education } from "../entities/Education";

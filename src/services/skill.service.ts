@@ -1,9 +1,8 @@
-import SkillRepository from "@/repositories/skill.repository";
+import SkillRepository from "src/repositories/skill.repository";
 import redis from "../config/redisClient";
 import { SkillDto } from "../dto/skill.dto";
 import { Skill } from "../entities/Skill";
 import CloudinaryService from "../helpers/cloudinary.service";
-
 
 export class SkillService {
     private readonly SKILL_LIST_CACHE_KEY = "portfolio:skills:list";
@@ -112,24 +111,24 @@ export class SkillService {
         }
     }
 
-        async deleteSkill(id: number): Promise<{ message: string }> {
-            try {
-                const skill = await this.getSkillById(id);
-                if (!skill) throw new Error("Habilidad no encontrada");
-    
-                const imageToDelete = skill.image;
-                if (imageToDelete) {
-                    await CloudinaryService.deleteImage(imageToDelete);
-                }
-    
-                await SkillRepository.remove(skill);
-                await this.invalidateSkillsCache();
-                await this.invalidateSkillCache(id);
-    
-                return { message: "Habilidad eliminada con éxito" };
-            } catch (error) {
-                console.error(`Error eliminando habilidad ${id}:`, error);
-                throw new Error("No se pudo eliminar la habilidad.");
+    async deleteSkill(id: number): Promise<{ message: string }> {
+        try {
+            const skill = await this.getSkillById(id);
+            if (!skill) throw new Error("Habilidad no encontrada");
+
+            const imageToDelete = skill.image;
+            if (imageToDelete) {
+                await CloudinaryService.deleteImage(imageToDelete);
             }
+
+            await SkillRepository.remove(skill);
+            await this.invalidateSkillsCache();
+            await this.invalidateSkillCache(id);
+
+            return { message: "Habilidad eliminada con éxito" };
+        } catch (error) {
+            console.error(`Error eliminando habilidad ${id}:`, error);
+            throw new Error("No se pudo eliminar la habilidad.");
         }
+    }
 }

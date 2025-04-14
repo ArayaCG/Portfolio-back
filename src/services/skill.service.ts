@@ -1,8 +1,8 @@
-import SkillRepository from "src/repositories/skill.repository";
 import redis from "../config/redisClient";
 import { SkillDto } from "../dto/skill.dto";
 import { Skill } from "../entities/Skill";
 import CloudinaryService from "../helpers/cloudinary.service";
+import SkillRepository from "../repositories/skill.repository";
 
 export class SkillService {
     private readonly SKILL_LIST_CACHE_KEY = "portfolio:skills:list";

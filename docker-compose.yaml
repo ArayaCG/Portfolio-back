@@ -1,27 +1,44 @@
+version: "3.8"
+
 services:
-  services:
-    build: ./
+  backend:
+    build: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
     env_file:
       - .env
     depends_on:
-      - postgresdb
+      - postgres
+      - redis
 
-  postgresdb:
-    image: 'postgres'
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+  postgres:
+    image: postgres:latest
+    restart: always
     env_file:
       - .env
-  redis:
-    image: redis
-    container_name: redis-server
     ports:
-      - '6379:6379'
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
     volumes:
       - redisdata:/data
     command: redis-server --maxmemory 100mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:

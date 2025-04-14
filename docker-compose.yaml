@@ -1,15 +1,21 @@
 version: "3.8"
 
 services:
-  backend:
-    build: .
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-      - redis
+backend:
+  build: .
+  ports:
+    - "3000:3000"
+  env_file:
+    - .env
+  depends_on:
+    - postgres
+    - redis
+  healthcheck:
+    test: ["CMD", "curl", "--fail", "http://localhost:3000/health"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+
 
   postgres:
     image: postgres:latest

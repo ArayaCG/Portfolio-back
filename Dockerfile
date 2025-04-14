@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN npx tsc --project tsconfig.json
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["node", "dist/index.js"]

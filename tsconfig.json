@@ -4,7 +4,7 @@
         "module": "NodeNext",
         "rootDir": "./src",
         "outDir": "./dist",
-        "lib": ["ES6"],
+        "lib": ["ES2021"],
         "types": ["node"],
         "strict": true,
         "strictPropertyInitialization": false,
@@ -15,13 +15,13 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "moduleResolution": "NodeNext",
-        "baseUrl": "./",
+        "baseUrl": "./src",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["*"]
         },
         "sourceMap": true,
         "typeRoots": ["./node_modules/@types"]
     },
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules"]
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
 }

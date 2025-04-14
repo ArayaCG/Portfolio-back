@@ -1,30 +1,22 @@
-# Usamos Node.js como base
 FROM node:18-alpine
 
-# Instalamos herramientas de diagnóstico
-RUN apk add --no-cache bash
-
-# Configurar el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar package.json y package-lock.json
-COPY package*.json ./
+# Instalar herramientas para diagnóstico
+RUN apk add --no-cache bash
 
-# Instalar todas las dependencias (incluidas las de desarrollo)
+# Copiar solo package.json primero para aprovechar el caché
+COPY package*.json ./
 RUN npm install
 
-# Copiar el resto del código
+# Copiar el resto del código fuente
 COPY . .
 
-# Ver contenido del directorio para diagnóstico
-RUN ls -la
-RUN echo "Contenido de tsconfig.json:" && cat tsconfig.json
+# Ejecutar TypeScript directamente y redirigir la salida a un archivo
+RUN npx tsc > typescript_build_output.log 2>&1 || (cat typescript_build_output.log && false)
 
-# Compilar con salida detallada
-RUN npm run build --verbose
+# Verificar que la compilación fue exitosa mostrando archivos generados
+RUN ls -la dist/ || echo "¡La carpeta dist no se creó!"
 
-# Exponer el puerto de la app
 EXPOSE 3000
-
-# Ejecutar el código compilado
 CMD ["npm", "start"]

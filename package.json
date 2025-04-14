@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "tsc",
+        "build": "tsc --listFiles --traceResolution",
         "start": "node dist/index.js",
         "dev": "nodemon src/index.ts"
     },

@@ -2,17 +2,19 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copiar package.json y instalar dependencias
 COPY package*.json ./
 RUN npm install
 
-# Copiar el código fuente
 COPY . .
 
-# Verificar que los imports sean correctos (esto es solo informativo)
+RUN echo "Node.js version: $(node -v)"
+RUN echo "npm version: $(npm -v)"
+RUN ls -al /app
+RUN cat package.json
+RUN cat tsconfig.json
+
 RUN grep -r "import.*Repository.*from" src/services/
 
-# Compilar el proyecto
 RUN npm run build
 
 EXPOSE 3000

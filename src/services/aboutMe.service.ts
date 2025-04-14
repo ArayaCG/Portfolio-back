@@ -2,7 +2,7 @@ import redis from "../config/redisClient";
 import { AboutMeDto } from "../dto/aboutMe.dto";
 import { AboutMe } from "../entities/AboutMe";
 import { CloudinaryService } from "../helpers/cloudinary.service";
-import { AboutMeRepository } from "../repositories/aboutMe.repository";
+import AboutMeRepository from "../repositories/aboutMe.repository";
 
 export class AboutMeService {
     private readonly ABOUT_ME_CACHE_KEY = "portfolio:about-me:single";

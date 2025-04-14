@@ -2,7 +2,7 @@ import { EMAIL_USER } from "../config/envs";
 import transporter from "../config/nodemailer";
 import { ContactMessageDto } from "../dto/contactMessage.dto";
 import { ContactMessage } from "../entities/ContactMessage";
-import { ContactMessageRepository } from "../repositories/contactMessage.repository";
+import ContactMessageRepository from "../repositories/contactMessage.repository";
 import redis from "../config/redisClient";
 
 export const getContactMessagesService = async (): Promise<ContactMessage[]> => {

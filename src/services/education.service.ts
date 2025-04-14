@@ -2,7 +2,7 @@ import redis from "../config/redisClient";
 import { EducationDto } from "../dto/education.dto";
 import { Education } from "../entities/Education";
 import CloudinaryService from "../helpers/cloudinary.service";
-import { EducationRepository } from "../repositories/education.repository";
+import EducationRepository from "../repositories/education.repository";
 
 export class EducationService {
     private readonly EDUCATION_LIST_CACHE_KEY = "portfolio:educations:list";

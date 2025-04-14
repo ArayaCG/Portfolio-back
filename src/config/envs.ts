@@ -13,3 +13,9 @@ export const PORT_REDIS = process.env.PORT_REDIS ? parseInt(process.env.PORT_RED
 export const JWT_SECRET = process.env.JWT_SECRET;
 export const USERNAME_ADMIN = process.env.USERNAME_ADMIN;
 export const PASSWORD_ADMIN = process.env.PASSWORD_ADMIN;
+export const DB_HOST = process.env.PGHOST;
+export const DB_PORT = Number(process.env.PGPORT);
+export const DB_USER = process.env.PGUSER;
+export const DB_PASS = process.env.PGPASSWORD;
+export const DB_NAME = process.env.PGDATABASE;
+

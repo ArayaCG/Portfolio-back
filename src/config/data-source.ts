@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { BASE_DATOS, PASSWORD_POSTGRE } from "./envs";
+import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } from "./envs";
 import { readdirSync } from "fs";
 import path from "path";
 
@@ -15,11 +15,11 @@ const loadEntities = () => {
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "postgres",
-    password: PASSWORD_POSTGRE,
-    database: BASE_DATOS,
+    host: DB_HOST,
+    port: DB_PORT,
+    username: DB_USER,
+    password: DB_PASS,
+    database: DB_NAME,
     synchronize: true,
     logging: false,
     dropSchema: true,

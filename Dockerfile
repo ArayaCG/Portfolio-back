@@ -6,7 +6,6 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-
 RUN npx tsc --project tsconfig.json
 
 EXPOSE 3000

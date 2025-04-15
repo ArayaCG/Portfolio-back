@@ -1,13 +1,23 @@
 import { DataSource } from "typeorm";
-import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } from "./envs";
+import { DATABASE_URL, DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } from "./envs";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: DB_HOST,
-    port: DB_PORT,
-    username: DB_USER,
-    password: DB_PASS,
-    database: DB_NAME,
+    ...(DATABASE_URL 
+        ? { 
+            url: DATABASE_URL,
+            ssl: process.env.NODE_ENV === "production" ? {
+                rejectUnauthorized: false
+            } : false 
+          }
+        : {
+            host: DB_HOST,
+            port: DB_PORT,
+            username: DB_USER,
+            password: DB_PASS,
+            database: DB_NAME
+          }
+    ),
     synchronize: true,
     logging: false,
     dropSchema: false,

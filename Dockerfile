@@ -7,6 +7,9 @@ RUN npm install
 
 COPY . .
 
+# TEMPORARY: List directory structure for debugging
+RUN echo "--- Listing /app directory ---" && ls -R /app
+
 RUN rm -rf /app/dist
 
 RUN npx tsc --noEmitOnError false

@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM node:18-slim AS builder
 
 WORKDIR /app
 
@@ -7,14 +7,21 @@ RUN npm install
 
 COPY . .
 
-# Instalar tipos adicionales por si acaso
-RUN npm install --save-dev @types/express @types/express-serve-static-core @types/multer @types/node
+RUN rm -rf /app/dist
 
-# Intenta compilar con la opción --noEmitOnError false para continuar incluso con errores
-RUN npx tsc --noEmitOnError false || echo "Build completed with warnings"
+RUN npx tsc --noEmitOnError false
+
+FROM node:18-slim
+
+WORKDIR /app
+
+COPY --from=builder /app/package*.json ./
+RUN npm install --omit=dev --production
+
+COPY --from=builder /app/dist ./dist
 
 ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "dist/index.js"]

@@ -9,7 +9,8 @@ COPY tsconfig.json ./
 COPY src ./src
 COPY package.json ./
 
-RUN echo "--- Listing /app directory in builder ---" && ls -R /app
+RUN echo "--- Listing /app directory ---" && ls -R /app
+RUN echo "--- Listing /app/src directory ---" && ls -R /app/src
 
 RUN rm -rf /app/dist
 
@@ -23,7 +24,6 @@ COPY --from=builder /app/package*.json ./
 RUN npm install --omit=dev --production
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/src ./src
 
 ENV NODE_ENV=production
 

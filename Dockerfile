@@ -5,9 +5,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY . .
+COPY src ./src
+COPY tsconfig.json ./
+COPY package.json ./
 
-# TEMPORARY: List directory structure for debugging
 RUN echo "--- Listing /app directory ---" && ls -R /app
 
 RUN rm -rf /app/dist

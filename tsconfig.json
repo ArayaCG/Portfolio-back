@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "NodeNext",
         "declaration": true,
         "removeComments": true,
         "emitDecoratorMetadata": true,
@@ -24,7 +24,8 @@
         "resolveJsonModule": true,
         "rootDir": "./src",
         "esModuleInterop": true,
-        "strict": true
+        "strict": true,
+        "moduleResolution": "NodeNext"
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]

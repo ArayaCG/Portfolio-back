@@ -1,5 +1,5 @@
 import CloudinaryService from "../helpers/cloudinary.service";
-import redis from "../config/redisClient";
+import redisClient from "../config/redisClient";
 import { Experience } from "../entities/Experience";
 import { ExperienceDto } from "../dto/experience.dto";
 import { Type } from "../enum/type.enum";
@@ -13,11 +13,11 @@ export class ExperienceService {
 
     async getExperiences(): Promise<Experience[] | null> {
         try {
-            const cachedExperiences = await redis.get(this.EXPERIENCE_LIST_CACHE_KEY);
+            const cachedExperiences = await redisClient.get(this.EXPERIENCE_LIST_CACHE_KEY);
             if (cachedExperiences) return JSON.parse(cachedExperiences);
 
             const experiences = await ExperienceRepository.find();
-            await redis.setex(
+            await redisClient.setex(
                 this.EXPERIENCE_LIST_CACHE_KEY,
                 this.EXPERIENCE_CACHE_EXPIRATION,
                 JSON.stringify(experiences)
@@ -33,7 +33,7 @@ export class ExperienceService {
 
     async invalidateExperiencesCache(): Promise<void> {
         try {
-            await redis.del(this.EXPERIENCE_LIST_CACHE_KEY);
+            await redisClient.del(this.EXPERIENCE_LIST_CACHE_KEY);
         } catch (error) {
             console.error("Error invalidando caché de experiencias:", error);
         }
@@ -42,12 +42,12 @@ export class ExperienceService {
     async getExperienceById(id: number): Promise<Experience | null> {
         try {
             const cacheKey = `${this.EXPERIENCE_ITEM_CACHE_PREFIX}${id}`;
-            const cachedExperience = await redis.get(cacheKey);
+            const cachedExperience = await redisClient.get(cacheKey);
             if (cachedExperience) return JSON.parse(cachedExperience);
 
             const experience = await ExperienceRepository.findOne({ where: { id } });
             if (experience) {
-                await redis.setex(cacheKey, this.EXPERIENCE_CACHE_EXPIRATION, JSON.stringify(experience));
+                await redisClient.setex(cacheKey, this.EXPERIENCE_CACHE_EXPIRATION, JSON.stringify(experience));
             }
 
             return experience;
@@ -61,7 +61,7 @@ export class ExperienceService {
     async invalidateExperienceCache(id: number): Promise<void> {
         try {
             const cacheKey = `${this.EXPERIENCE_ITEM_CACHE_PREFIX}${id}`;
-            await redis.del(cacheKey);
+            await redisClient.del(cacheKey);
         } catch (error) {
             console.error(`Error invalidando caché de experiencia ${id}:`, error);
         }

@@ -1,4 +1,4 @@
-import redis from "../config/redisClient";
+import redisClient from "../config/redisClient";
 import { EducationDto } from "../dto/education.dto";
 import { Education } from "../entities/Education";
 import CloudinaryService from "../helpers/cloudinary.service";
@@ -11,11 +11,11 @@ export class EducationService {
 
     async getEducations(): Promise<Education[] | null> {
         try {
-            const cachedEducations = await redis.get(this.EDUCATION_LIST_CACHE_KEY);
+            const cachedEducations = await redisClient.get(this.EDUCATION_LIST_CACHE_KEY);
             if (cachedEducations) return JSON.parse(cachedEducations);
 
             const educations = await EducationRepository.find();
-            await redis.setex(
+            await redisClient.setex(
                 this.EDUCATION_LIST_CACHE_KEY,
                 this.EDUCATION_CACHE_EXPIRATION,
                 JSON.stringify(educations)
@@ -31,7 +31,7 @@ export class EducationService {
 
     async invalidateEducationsCache(): Promise<void> {
         try {
-            await redis.del(this.EDUCATION_LIST_CACHE_KEY);
+            await redisClient.del(this.EDUCATION_LIST_CACHE_KEY);
         } catch (error) {
             console.error("Error invalidando caché de educación", error);
         }
@@ -40,12 +40,12 @@ export class EducationService {
     async getEducationById(id: number): Promise<Education | null> {
         try {
             const cacheKey = `${this.EDUCATION_ITEM_CACHE_PREFIX}${id}`;
-            const cachedEducation = await redis.get(cacheKey);
+            const cachedEducation = await redisClient.get(cacheKey);
             if (cachedEducation) return JSON.parse(cachedEducation);
 
             const education = await EducationRepository.findOne({ where: { id } });
             if (education) {
-                await redis.setex(cacheKey, this.EDUCATION_CACHE_EXPIRATION, JSON.stringify(education));
+                await redisClient.setex(cacheKey, this.EDUCATION_CACHE_EXPIRATION, JSON.stringify(education));
             }
 
             return education;
@@ -59,7 +59,7 @@ export class EducationService {
     async invalidateEducationCache(id: number): Promise<void> {
         try {
             const cacheKey = `${this.EDUCATION_ITEM_CACHE_PREFIX}${id}`;
-            await redis.del(cacheKey);
+            await redisClient.del(cacheKey);
         } catch (error) {
             console.error(`Error invalidando caché de educación ${id}`, error);
         }

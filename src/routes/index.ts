@@ -13,7 +13,7 @@ router.use("/auth", authRouter);
 router.use("/aboutMe", aboutMeRoute);
 router.use("/contactMessage", contactMessageRoute);
 router.use("/experiences", experienceRoute);
-router.use("/visits", visitorRoute);
+router.use("/api/visits", visitorRoute);
 router.use("/educations", educationRoute);
 router.use("/skills", skillRoute);
 

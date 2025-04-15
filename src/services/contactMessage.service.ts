@@ -2,7 +2,7 @@ import { EMAIL_USER } from "../config/envs";
 import transporter from "../config/nodemailer";
 import { ContactMessageDto } from "../dto/contactMessage.dto";
 import { ContactMessage } from "../entities/ContactMessage";
-import redis from "../config/redisClient";
+import redisClient from "../config/redisClient";
 import ContactMessageRepository from "../repositories/contactMessage.repository";
 
 export const getContactMessagesService = async (): Promise<ContactMessage[]> => {
@@ -21,10 +21,10 @@ export const createContactMessageService = async (
 ): Promise<ContactMessage | null> => {
     try {
         const messageCountKey = `contact_messages:${userIp}`;
-        const currentCount = await redis.incr(messageCountKey);
+        const currentCount = await redisClient.incr(messageCountKey);
 
         if (currentCount === 1) {
-            await redis.expire(messageCountKey, 3600);
+            await redisClient.expire(messageCountKey, 3600);
         }
 
         if (currentCount > 3) {

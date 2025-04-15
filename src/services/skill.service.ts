@@ -1,4 +1,4 @@
-import redis from "../config/redisClient";
+import redisClient from "../config/redisClient";
 import { SkillDto } from "../dto/skill.dto";
 import { Skill } from "../entities/Skill";
 import CloudinaryService from "../helpers/cloudinary.service";
@@ -11,12 +11,12 @@ export class SkillService {
 
     async getSkills(): Promise<Skill[] | null> {
         try {
-            const cachedSkills = await redis.get(this.SKILL_LIST_CACHE_KEY);
+            const cachedSkills = await redisClient.get(this.SKILL_LIST_CACHE_KEY);
             if (cachedSkills) return JSON.parse(cachedSkills);
 
             const skills = await SkillRepository.find();
 
-            await redis.setex(this.SKILL_LIST_CACHE_KEY, this.SKILL_CACHE_EXPIRATION, JSON.stringify(skills));
+            await redisClient.setex(this.SKILL_LIST_CACHE_KEY, this.SKILL_CACHE_EXPIRATION, JSON.stringify(skills));
 
             return skills;
         } catch (error) {
@@ -28,7 +28,7 @@ export class SkillService {
 
     async invalidateSkillsCache(): Promise<void> {
         try {
-            await redis.del(this.SKILL_LIST_CACHE_KEY);
+            await redisClient.del(this.SKILL_LIST_CACHE_KEY);
         } catch (error) {
             console.error("Error invalidando caché de habilidades", error);
         }
@@ -37,12 +37,12 @@ export class SkillService {
     async getSkillById(id: number): Promise<Skill | null> {
         try {
             const cacheKey = `${this.SKILL_ITEM_CACHE_PREFIX}${id}`;
-            const cachedSkill = await redis.get(cacheKey);
+            const cachedSkill = await redisClient.get(cacheKey);
             if (cachedSkill) return JSON.parse(cachedSkill);
 
             const skill = await SkillRepository.findOne({ where: { id } });
             if (skill) {
-                await redis.setex(cacheKey, this.SKILL_CACHE_EXPIRATION, JSON.stringify(skill));
+                await redisClient.setex(cacheKey, this.SKILL_CACHE_EXPIRATION, JSON.stringify(skill));
             }
 
             return skill;
@@ -56,7 +56,7 @@ export class SkillService {
     async invalidateSkillCache(id: number): Promise<void> {
         try {
             const cacheKey = `${this.SKILL_ITEM_CACHE_PREFIX}${id}`;
-            await redis.del(cacheKey);
+            await redisClient.del(cacheKey);
         } catch (error) {
             console.error(`Error invalidando caché de habilidad ${id}`, error);
         }

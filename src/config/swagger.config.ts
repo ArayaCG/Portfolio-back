@@ -2,6 +2,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Router } from "express";
 import { Type } from "../enum/type.enum";
+import path from "path";
 
 const swaggerOptions = {
     definition: {
@@ -87,13 +88,7 @@ const swaggerOptions = {
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: ["./src/routes/*.ts"],
+    apis: [path.resolve(__dirname, "../routes/**/*.ts")],
 };
 
 export const swaggerSpec = swaggerJsdoc(swaggerOptions);
-
-const swaggerRouter = Router();
-
-swaggerRouter.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-export default swaggerRouter;

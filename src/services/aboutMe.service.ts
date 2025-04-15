@@ -1,4 +1,4 @@
-import redis from "../config/redisClient";
+import redisClient from "../config/redisClient";
 import { AboutMeDto } from "../dto/aboutMe.dto";
 import { AboutMe } from "../entities/AboutMe";
 import { CloudinaryService } from "../helpers/cloudinary.service";
@@ -10,7 +10,7 @@ export class AboutMeService {
 
     async getAboutMe(): Promise<AboutMe | null> {
         try {
-            const cachedAboutMe = await redis.get(this.ABOUT_ME_CACHE_KEY);
+            const cachedAboutMe = await redisClient.get(this.ABOUT_ME_CACHE_KEY);
 
             if (cachedAboutMe) {
                 return JSON.parse(cachedAboutMe);
@@ -24,7 +24,7 @@ export class AboutMeService {
 
             const aboutMe = aboutMeResults[0];
 
-            await redis.setex(this.ABOUT_ME_CACHE_KEY, this.ABOUT_ME_CACHE_EXPIRATION, JSON.stringify(aboutMe));
+            await redisClient.setex(this.ABOUT_ME_CACHE_KEY, this.ABOUT_ME_CACHE_EXPIRATION, JSON.stringify(aboutMe));
 
             return aboutMe;
         } catch (error) {
@@ -38,7 +38,7 @@ export class AboutMeService {
 
     async invalidateAboutMeCache(): Promise<void> {
         try {
-            await redis.del(this.ABOUT_ME_CACHE_KEY);
+            await redisClient.del(this.ABOUT_ME_CACHE_KEY);
         } catch (error) {
             console.error("Error invalidando caché de About Me:", error);
         }

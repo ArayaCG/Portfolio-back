@@ -1,8 +1,10 @@
 import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import { Router } from "express";
 import { Type } from "../enum/type.enum";
 import path from "path";
+
+console.log("Directorio actual (__dirname) en swagger.config.js:", __dirname);
+const apiPath = path.resolve(__dirname, "../routes/**/*.js");
+console.log("Ruta de archivos API configurada:", apiPath);
 
 const swaggerOptions = {
     definition: {
@@ -88,7 +90,7 @@ const swaggerOptions = {
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: [path.resolve(__dirname, "../routes/**/*.ts")],
+    apis: [apiPath]
 };
 
 export const swaggerSpec = swaggerJsdoc(swaggerOptions);

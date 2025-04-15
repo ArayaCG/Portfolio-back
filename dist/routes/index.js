@@ -16,7 +16,7 @@ router.use("/auth", auth_route_1.default);
 router.use("/aboutMe", aboutMe_route_1.default);
 router.use("/contactMessage", contactMessage_route_1.default);
 router.use("/experiences", experience_route_1.default);
-router.use("/visits", visitor_route_1.default);
+router.use("/api/visits", visitor_route_1.default);
 router.use("/educations", education_route_1.default);
 router.use("/skills", skill_route_1.default);
 exports.default = router;

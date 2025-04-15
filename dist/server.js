@@ -13,7 +13,7 @@ server.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1
 server.use((0, cors_1.default)());
 server.use(express_1.default.json());
 server.use("/api", routes_1.default);
-server.get('/health', (req, res) => {
-    res.status(200).send('OK');
+server.get("/health", (req, res) => {
+    res.status(200).send("OK");
 });
 exports.default = server;

@@ -1,3 +1,3 @@
 import Redis from "ioredis";
-declare const redis: Redis;
-export default redis;
+declare let redisClient: Redis;
+export default redisClient;

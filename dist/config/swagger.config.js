@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.swaggerSpec = void 0;
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
-const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const express_1 = require("express");
 const type_enum_1 = require("../enum/type.enum");
+const path_1 = __importDefault(require("path"));
+console.log("Directorio actual (__dirname) en swagger.config.js:", __dirname);
+const apiPath = path_1.default.resolve(__dirname, "../routes/**/*.js");
+console.log("Ruta de archivos API configurada:", apiPath);
 const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
@@ -92,9 +94,6 @@ const swaggerOptions = {
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: ["./src/routes/*.ts"],
+    apis: [apiPath]
 };
 exports.swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
-const swaggerRouter = (0, express_1.Router)();
-swaggerRouter.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(exports.swaggerSpec));
-exports.default = swaggerRouter;

@@ -10,17 +10,19 @@ declare global {
     }
 }
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Acceso denegado. No hay token." });
+        res.status(401).json({ message: "Acceso denegado. No hay token." });
+        return;
     }
 
     const token = authHeader.split(" ")[1];
 
     if (!JWT_SECRET) {
-        return res.status(400).json({ message: "Error JWT" });
+        res.status(400).json({ message: "Error JWT" });
+        return;
     }
 
     try {
@@ -28,6 +30,6 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         req.user = decoded;
         next();
     } catch (error) {
-        return res.status(401).json({ message: "Token inválido." });
+        res.status(401).json({ message: "Token inválido." });
     }
 };

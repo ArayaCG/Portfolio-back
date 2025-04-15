@@ -4,7 +4,7 @@ import { AuthService } from "../services/auth.service";
 export class AuthController {
     private authService = new AuthService();
 
-    async login(req: Request, res: Response) {
+    async login(req: Request, res: Response): Promise<void> {
         try {
             const { identifier, password } = req.body;
 
@@ -14,17 +14,17 @@ export class AuthController {
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message === "Credenciales inválidas") {
-                    return res.status(401).json({ message: error.message });
+                    res.status(401).json({ message: error.message });
+                    return;
                 }
-
-                return res.status(500).json({ message: "Error en el servidor" });
+                res.status(500).json({ message: "Error en el servidor" });
+                return;
             }
-
             res.status(500).json({ message: "Error desconocido" });
         }
     }
 
-    async initializeAdmin(req: Request, res: Response) {
+    async initializeAdmin(req: Request, res: Response): Promise<void> {
         try {
             const { username, email, password } = req.body;
             const admin = await this.authService.createInitialAdmin(username, email, password);
@@ -32,8 +32,10 @@ export class AuthController {
         } catch (error) {
             if (error instanceof Error) {
                 res.status(400).json({ message: error.message });
+                return;
             } else {
                 res.status(500).json({ message: "Error en el servidor" });
+                return;
             }
         }
     }

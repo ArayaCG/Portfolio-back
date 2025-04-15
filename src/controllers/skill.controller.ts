@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { SkillService } from "../services/skill.service";
 import { SkillDto } from "../dto/skill.dto";
 
-export const getSkills = async (req: Request, res: Response) => {
+export const getSkills = async (req: Request, res: Response): Promise<void> => {
     try {
         const skills = await new SkillService().getSkills();
         if (!skills) {
-            return res.status(404).json({ message: "No se encontraron habilidades" });
+            res.status(404).json({ message: "No se encontraron habilidades" });
+            return;
         }
         res.status(200).json(skills);
     } catch (error) {
@@ -15,13 +16,14 @@ export const getSkills = async (req: Request, res: Response) => {
     }
 };
 
-export const getSkillById = async (req: Request, res: Response) => {
+export const getSkillById = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = parseInt(req.params.id);
         const skill = await new SkillService().getSkillById(id);
 
         if (!skill) {
-            return res.status(404).json({ message: "Habilidad no encontrada" });
+            res.status(404).json({ message: "Habilidad no encontrada" });
+            return;
         }
         res.status(200).json(skill);
     } catch (error) {
@@ -30,13 +32,14 @@ export const getSkillById = async (req: Request, res: Response) => {
     }
 };
 
-export const createSkill = async (req: Request, res: Response) => {
+export const createSkill = async (req: Request, res: Response): Promise<void> => {
     try {
         const skillData: SkillDto = req.body;
         const file = req.file;
 
         if (!file) {
-            return res.status(400).json({ message: "Se requiere un archivo de imagen" });
+            res.status(400).json({ message: "Se requiere un archivo de imagen" });
+            return;
         }
 
         const result = await new SkillService().createSkill(skillData, file);
@@ -49,7 +52,7 @@ export const createSkill = async (req: Request, res: Response) => {
     }
 };
 
-export const updateSkill = async (req: Request, res: Response) => {
+export const updateSkill = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = parseInt(req.params.id);
         const skillData: Partial<SkillDto> = req.body;
@@ -65,7 +68,7 @@ export const updateSkill = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteSkill = async (req: Request, res: Response) => {
+export const deleteSkill = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = parseInt(req.params.id);
         const result = await new SkillService().deleteSkill(id);

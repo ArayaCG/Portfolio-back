@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { visitorService } from "../services/visitor.service";
 
-export const logVisit = async (req: Request, res: Response) => {
+export const logVisit = async (req: Request, res: Response): Promise<void> => {
     try {
         const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
         const result = await visitorService.logVisit(ip);
@@ -12,7 +12,7 @@ export const logVisit = async (req: Request, res: Response) => {
     }
 };
 
-export const getVisitLogs = async (req: Request, res: Response) => {
+export const getVisitLogs = async (req: Request, res: Response): Promise<void> => {
     try {
         const logs = await visitorService.getVisitLogs();
         res.json(logs);
@@ -22,7 +22,7 @@ export const getVisitLogs = async (req: Request, res: Response) => {
     }
 };
 
-export const getVisitCounter = async (req: Request, res: Response) => {
+export const getVisitCounter = async (req: Request, res: Response): Promise<void> => {
     try {
         const result = await visitorService.getVisitCounter();
         res.json(result);

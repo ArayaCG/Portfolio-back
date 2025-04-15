@@ -1,32 +1,21 @@
 {
     "compilerOptions": {
-        "module": "NodeNext",
-        "declaration": true,
-        "removeComments": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true,
-        "target": "ES2022",
-        "sourceMap": true,
+        "target": "ES2020",
+        "module": "CommonJS",
         "outDir": "./dist",
-        "baseUrl": "./",
-        "paths": {
-            "*": ["node_modules/*"]
-        },
-        "incremental": true,
-        "skipLibCheck": true,
-        "strictNullChecks": false,
-        "noImplicitAny": false,
-        "strictBindCallApply": false,
-        "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false,
-        "resolveJsonModule": true,
         "rootDir": "./src",
+        "declaration": true,
         "esModuleInterop": true,
         "strict": true,
-        "moduleResolution": "NodeNext",
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "moduleResolution": "Node",
+        "allowSyntheticDefaultImports": true,
         "typeRoots": ["./node_modules/@types"],
-        "types": ["node", "express", "multer"]
+        "types": ["node", "express", "multer"],
+        "strictPropertyInitialization": false
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]

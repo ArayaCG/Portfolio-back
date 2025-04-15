@@ -1,7 +1,13 @@
 import { Router } from "express";
 import multer from "multer";
 import { verifyToken } from "../middlewares/auth.middleware";
-import * as educationController from "../controllers/education.controller";
+import {
+    createEducation,
+    deleteEducation,
+    getAllEducations,
+    getEducationById,
+    updateEducation,
+} from "../controllers/education.controller";
 
 const upload = multer({ dest: "uploads/" });
 
@@ -27,7 +33,7 @@ const educationRoute: Router = Router();
  *       500:
  *         description: Error en el servidor
  */
-educationRoute.get("/", educationController.getAllEducations);
+educationRoute.get("/", getAllEducations);
 
 /**
  * @swagger
@@ -51,7 +57,7 @@ educationRoute.get("/", educationController.getAllEducations);
  *       500:
  *         description: Error en el servidor
  */
-educationRoute.get("/:id", educationController.getEducationById);
+educationRoute.get("/:id", getEducationById);
 
 /**
  * @swagger
@@ -85,7 +91,7 @@ educationRoute.get("/:id", educationController.getEducationById);
  *       500:
  *         description: Error en el servidor
  */
-educationRoute.post("/", verifyToken, upload.single("image"), educationController.createEducation);
+educationRoute.post("/", verifyToken, upload.single("image"), createEducation);
 
 /**
  * @swagger
@@ -127,7 +133,7 @@ educationRoute.post("/", verifyToken, upload.single("image"), educationControlle
  *       500:
  *         description: Error en el servidor
  */
-educationRoute.put("/:id", verifyToken, upload.single("image"), educationController.updateEducation);
+educationRoute.put("/:id", verifyToken, upload.single("image"), updateEducation);
 
 /**
  * @swagger
@@ -153,6 +159,6 @@ educationRoute.put("/:id", verifyToken, upload.single("image"), educationControl
  *       500:
  *         description: Error en el servidor
  */
-educationRoute.delete("/:id", verifyToken, educationController.deleteEducation);
+educationRoute.delete("/:id", verifyToken, deleteEducation);
 
 export default educationRoute;

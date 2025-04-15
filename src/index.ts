@@ -1,6 +1,6 @@
-import "reflect-metadata"; 
+import "reflect-metadata";
 import { PORT } from "./config/envs";
-import server from "./server";
+import server from "./server"; 
 import { AppDataSource } from "./config/data-source";
 import { initializeAdmin } from "./seeders/admin.seeder";
 

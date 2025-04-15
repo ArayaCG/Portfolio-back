@@ -6,7 +6,7 @@ import { generateAdminToken } from "../config/auth";
 export class AuthService {
     private adminRepository = AppDataSource.getRepository(Admin);
 
-    async login(identifier: string, password: string) {
+    async login(identifier: string, password: string): Promise<{ token: string }> {
         const admin = await this.adminRepository.findOne({
             where: [{ email: identifier }, { username: identifier }],
         });
@@ -29,7 +29,7 @@ export class AuthService {
         return { token };
     }
 
-    async createInitialAdmin(username: string, email: string, password: string) {
+    async createInitialAdmin(username: string, email: string, password: string): Promise<Admin> {
         const existingAdmin = await this.adminRepository.findOne({
             where: [{ email }, { username }],
         });

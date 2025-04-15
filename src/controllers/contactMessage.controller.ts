@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { getContactMessagesService, createContactMessageService } from "../services/contactMessage.service";
 import { ContactMessage } from "../entities/ContactMessage";
 
-export const getMessages = async (req: Request, res: Response) => {
+export const getMessages = async (req: Request, res: Response): Promise<void> => {
     try {
         const messages: ContactMessage[] = await getContactMessagesService();
         res.status(200).json(messages);
@@ -12,7 +12,7 @@ export const getMessages = async (req: Request, res: Response) => {
     }
 };
 
-export const createMessage = async (req: Request, res: Response) => {
+export const createMessage = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, email, message } = req.body;
 
@@ -24,9 +24,10 @@ export const createMessage = async (req: Request, res: Response) => {
         );
 
         if (newMessage === null) {
-            return res.status(429).json({
+            res.status(429).json({
                 message: "Has alcanzado el límite de mensajes. Intenta de nuevo más tarde.",
             });
+            return;
         }
 
         res.status(201).json(newMessage);

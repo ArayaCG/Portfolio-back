@@ -1,7 +1,7 @@
 import { Router } from "express";
-import * as SkillController from "../controllers/skill.controller";
 import { verifyToken } from "../middlewares/auth.middleware";
 import upload from "../config/multer.config";
+import { createSkill, deleteSkill, getSkillById, getSkills, updateSkill } from "../controllers/skill.controller";
 
 const skillRoute: Router = Router();
 
@@ -51,7 +51,7 @@ const skillRoute: Router = Router();
  *       500:
  *         description: Error del servidor
  */
-skillRoute.get("/", SkillController.getSkills);
+skillRoute.get("/", getSkills);
 
 /**
  * @swagger
@@ -77,7 +77,7 @@ skillRoute.get("/", SkillController.getSkills);
  *       500:
  *         description: Error del servidor
  */
-skillRoute.get("/:id", SkillController.getSkillById);
+skillRoute.get("/:id", getSkillById);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ skillRoute.get("/:id", SkillController.getSkillById);
  *       500:
  *         description: Error en el servidor
  */
-skillRoute.post("/", verifyToken, upload.single("image"), SkillController.createSkill);
+skillRoute.post("/", verifyToken, upload.single("image"), createSkill);
 
 /**
  * @swagger
@@ -149,7 +149,7 @@ skillRoute.post("/", verifyToken, upload.single("image"), SkillController.create
  *       500:
  *         description: Error en el servidor
  */
-skillRoute.put("/:id", verifyToken, upload.single("image"), SkillController.updateSkill);
+skillRoute.put("/:id", verifyToken, upload.single("image"), updateSkill);
 
 /**
  * @swagger
@@ -173,6 +173,6 @@ skillRoute.put("/:id", verifyToken, upload.single("image"), SkillController.upda
  *       500:
  *         description: Error en el servidor
  */
-skillRoute.delete("/:id", verifyToken, SkillController.deleteSkill);
+skillRoute.delete("/:id", verifyToken, deleteSkill);
 
 export default skillRoute;

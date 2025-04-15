@@ -2,9 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/envs";
 
-declare module "express-serve-static-core" {
-    interface Request {
-        user?: any;
+declare global {
+    namespace Express {
+        interface Request {
+            user?: any;
+        }
     }
 }
 

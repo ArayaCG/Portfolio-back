@@ -6,7 +6,7 @@ console.log("Directorio actual (__dirname) en swagger.config.js:", __dirname);
 const apiPath = path.resolve(__dirname, "../routes/**/*.{js,ts}");
 console.log("Ruta de archivos API configurada:", apiPath);
 
-const swaggerOptions = {
+export const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
@@ -90,7 +90,7 @@ const swaggerOptions = {
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: [apiPath],
+    apis: ["./dist/routes/**/*.js", "./src/routes/**/*.ts"],
 };
 
 export const swaggerSpec = swaggerJsdoc(swaggerOptions);

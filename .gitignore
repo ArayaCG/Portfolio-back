@@ -1,3 +1,6 @@
 .env
 node_modules
 dist
+.dockerignore
+docker-compose.yaml
+Dockerfile

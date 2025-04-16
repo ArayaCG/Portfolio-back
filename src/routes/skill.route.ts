@@ -33,7 +33,7 @@ const skillRoute: Router = Router();
 
 /**
  * @swagger
- * /skills:
+ * /api/skills:
  *   get:
  *     summary: Obtener todas las habilidades
  *     tags: [Skills]
@@ -55,7 +55,7 @@ skillRoute.get("/", getSkills);
 
 /**
  * @swagger
- * /skills/{id}:
+ * /api/skills/{id}:
  *   get:
  *     summary: Obtener una habilidad por ID
  *     tags: [Skills]
@@ -81,7 +81,7 @@ skillRoute.get("/:id", getSkillById);
 
 /**
  * @swagger
- * /skills:
+ * /api/skills:
  *   post:
  *     summary: Crear una nueva habilidad
  *     tags: [Skills]
@@ -113,7 +113,7 @@ skillRoute.post("/", verifyToken, upload.single("image"), createSkill);
 
 /**
  * @swagger
- * /skills/{id}:
+ * /api/skills/{id}:
  *   put:
  *     summary: Actualizar una habilidad existente
  *     tags: [Skills]
@@ -153,7 +153,7 @@ skillRoute.put("/:id", verifyToken, upload.single("image"), updateSkill);
 
 /**
  * @swagger
- * /skills/{id}:
+ * /api/skills/{id}:
  *   delete:
  *     summary: Eliminar una habilidad
  *     tags: [Skills]

@@ -15,7 +15,8 @@
         "allowSyntheticDefaultImports": true,
         "typeRoots": ["./node_modules/@types"],
         "types": ["node", "express", "multer"],
-        "strictPropertyInitialization": false
+        "strictPropertyInitialization": false,
+        "removeComments": false
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]

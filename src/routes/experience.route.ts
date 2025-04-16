@@ -19,7 +19,7 @@ const experienceRoute: Router = Router();
 
 /**
  * @swagger
- * /experiences:
+ * /api/experiences:
  *   get:
  *     summary: Obtener todas las experiencias
  *     tags: [Experiences]
@@ -39,7 +39,7 @@ experienceRoute.get("/", getExperiences);
 
 /**
  * @swagger
- * /experiences/{id}:
+ * /api/experiences/{id}:
  *   get:
  *     summary: Obtener una experiencia por su ID
  *     tags: [Experiences]
@@ -66,7 +66,7 @@ experienceRoute.get("/:id", getExperienceById);
 
 /**
  * @swagger
- * /experiences:
+ * /api/experiences:
  *   post:
  *     summary: Crear una nueva experiencia (Requiere autenticación)
  *     security:
@@ -119,7 +119,7 @@ experienceRoute.post("/", verifyToken, upload.array("images", 3), createExperien
 
 /**
  * @swagger
- * /experiences/{id}:
+ * /api/experiences/{id}:
  *   put:
  *     summary: Actualizar una experiencia existente (Requiere autenticación)
  *     security:
@@ -170,7 +170,7 @@ experienceRoute.put("/:id", verifyToken, upload.array("images", 3), updateExperi
 
 /**
  * @swagger
- * /experiences/{id}:
+ * /api/experiences/{id}:
  *   delete:
  *     summary: Eliminar una experiencia (Requiere autenticación)
  *     security:

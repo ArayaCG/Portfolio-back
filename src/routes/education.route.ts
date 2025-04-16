@@ -21,7 +21,7 @@ const educationRoute: Router = Router();
 
 /**
  * @swagger
- * /educations:
+ * /api/educations:
  *   get:
  *     summary: Obtener todas las educaciones
  *     tags: [Education]
@@ -37,7 +37,7 @@ educationRoute.get("/", getAllEducations);
 
 /**
  * @swagger
- * /educations/{id}:
+ * /api/educations/{id}:
  *   get:
  *     summary: Obtener una educación por ID
  *     tags: [Education]
@@ -61,9 +61,11 @@ educationRoute.get("/:id", getEducationById);
 
 /**
  * @swagger
- * /educations:
+ * /api/educations:
  *   post:
  *     summary: Crear una nueva educación
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Education]
  *     security:
  *       - bearerAuth: []
@@ -88,6 +90,8 @@ educationRoute.get("/:id", getEducationById);
  *         description: Educación creada exitosamente
  *       400:
  *         description: Datos inválidos o faltantes
+ *       401:
+ *         description: No autorizado (Falta JWT)
  *       500:
  *         description: Error en el servidor
  */
@@ -95,7 +99,7 @@ educationRoute.post("/", verifyToken, upload.single("image"), createEducation);
 
 /**
  * @swagger
- * /educations/{id}:
+ * /api/educations/{id}:
  *   put:
  *     summary: Actualizar una educación existente
  *     tags: [Education]
@@ -137,7 +141,7 @@ educationRoute.put("/:id", verifyToken, upload.single("image"), updateEducation)
 
 /**
  * @swagger
- * /educations/{id}:
+ * /api/educations/{id}:
  *   delete:
  *     summary: Eliminar una educación
  *     tags: [Education]

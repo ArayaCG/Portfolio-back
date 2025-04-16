@@ -12,7 +12,7 @@ const contactMessageRoute: Router = Router();
 
 /**
  * @swagger
- * /contactMessage:
+ * /api/contactMessage:
  *   get:
  *     summary: Obtener todos los mensajes de contacto (Requiere autenticación)
  *     security:
@@ -28,7 +28,7 @@ contactMessageRoute.get("/", verifyToken, getMessages);
 
 /**
  * @swagger
- * /contactMessage:
+ * /api/contactMessage:
  *   post:
  *     summary: Enviar un mensaje de contacto
  *     tags: [ContactMessages]

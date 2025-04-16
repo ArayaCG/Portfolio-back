@@ -15,7 +15,7 @@ const aboutMeRoute: Router = Router();
 
 /**
  * @swagger
- * /aboutMe:
+ * /api/aboutMe:
  *   get:
  *     summary: Obtener información personal
  *     tags: [AboutMe]
@@ -35,9 +35,11 @@ aboutMeRoute.get("/", getAboutMe);
 
 /**
  * @swagger
- * /aboutMe:
+ * /api/aboutMe:
  *   post:
  *     summary: Crear información personal
+ *     security:
+ *       - bearerAuth: []
  *     tags: [AboutMe]
  *     requestBody:
  *       required: true
@@ -60,6 +62,8 @@ aboutMeRoute.get("/", getAboutMe);
  *         description: Información personal creada exitosamente
  *       400:
  *         description: Datos inválidos o faltantes
+ *       401:
+ *         description: No autorizado (Falta JWT)
  *       500:
  *         description: Error en el servidor
  */
@@ -67,9 +71,11 @@ aboutMeRoute.post("/", verifyToken, upload.single("image"), createAboutMe);
 
 /**
  * @swagger
- * /aboutMe:
+ * /api/aboutMe:
  *   put:
  *     summary: Actualizar información personal
+ *     security:
+ *       - bearerAuth: []
  *     tags: [AboutMe]
  *     requestBody:
  *       content:
@@ -87,6 +93,8 @@ aboutMeRoute.post("/", verifyToken, upload.single("image"), createAboutMe);
  *     responses:
  *       200:
  *         description: Información personal actualizada exitosamente
+ *       401:
+ *         description: No autorizado (Falta JWT)
  *       500:
  *         description: Error en el servidor
  */
@@ -94,13 +102,17 @@ aboutMeRoute.put("/", verifyToken, upload.single("image"), updateAboutMe);
 
 /**
  * @swagger
- * /aboutMe:
+ * /api/aboutMe:
  *   delete:
  *     summary: Eliminar información personal
+ *     security:
+ *       - bearerAuth: []
  *     tags: [AboutMe]
  *     responses:
  *       200:
  *         description: Información personal eliminada exitosamente
+ *       401:
+ *         description: No autorizado (Falta JWT)
  *       500:
  *         description: Error en el servidor
  */

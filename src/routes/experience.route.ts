@@ -1,4 +1,6 @@
 import { Router } from "express";
+import multer from "multer";
+import { verifyToken } from "../middlewares/auth.middleware";
 import {
     createExperience,
     deleteExperience,
@@ -6,8 +8,8 @@ import {
     getExperienceById,
     updateExperience,
 } from "../controllers/experience.controller";
-import upload from "../config/multer.config";
-import { verifyToken } from "../middlewares/auth.middleware";
+
+const upload = multer({ dest: "uploads/" });
 
 /**
  * @swagger

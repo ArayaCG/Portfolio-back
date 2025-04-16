@@ -64,8 +64,6 @@ educationRoute.get("/:id", getEducationById);
  * /api/educations:
  *   post:
  *     summary: Crear una nueva educación
- *     security:
- *       - bearerAuth: []
  *     tags: [Education]
  *     security:
  *       - bearerAuth: []
@@ -78,13 +76,17 @@ educationRoute.get("/:id", getEducationById);
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nombre de la educación
  *               description:
  *                 type: string
+ *                 description: Descripción de la educación
  *               year:
  *                 type: string
+ *                 description: Año en el que se realizó o se completa la educación
  *               image:
  *                 type: string
  *                 format: binary
+ *                 description: Archivo de imagen relacionado con la educación
  *     responses:
  *       201:
  *         description: Educación creada exitosamente
@@ -120,13 +122,17 @@ educationRoute.post("/", verifyToken, upload.single("image"), createEducation);
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nombre de la educación
  *               description:
  *                 type: string
+ *                 description: Descripción de la educación
  *               year:
  *                 type: string
+ *                 description: Año en el que se realizó o se completa la educación
  *               image:
  *                 type: string
  *                 format: binary
+ *                 description: Archivo de imagen relacionado con la educación
  *     responses:
  *       200:
  *         description: Educación actualizada exitosamente

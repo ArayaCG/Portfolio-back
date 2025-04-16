@@ -3,8 +3,6 @@ import Redis from "ioredis";
 let redisClient: Redis;
 
 try {
-    console.log("Intentando conectar a Redis con URL:", process.env.REDIS_URL);
-
     redisClient = new Redis((process.env.REDIS_URL || "redis://redis:6379") + "?family=0", {
         retryStrategy: (times) => {
             console.log(`Intento de reconexión a Redis #${times}`);

@@ -2,9 +2,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import { Type } from "../enum/type.enum";
 import path from "path";
 
-console.log("Directorio actual (__dirname) en swagger.config.js:", __dirname);
 const apiPath = path.resolve(__dirname, "../routes/**/*.{js,ts}");
-console.log("Ruta de archivos API configurada:", apiPath);
 
 export const swaggerOptions = {
     definition: {

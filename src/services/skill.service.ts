@@ -1,7 +1,6 @@
 import redisClient from "../config/redisClient";
 import { SkillDto } from "../dto/skill.dto";
 import { Skill } from "../entities/Skill";
-import CloudinaryService from "../helpers/cloudinary.service";
 import SkillRepository from "../repositories/skill.repository";
 
 export class SkillService {
@@ -65,37 +64,37 @@ export class SkillService {
     async createSkill(skillData: SkillDto): Promise<{ message: string }> {
         try {
             const newSkill = SkillRepository.create(skillData);
-    
+
             await SkillRepository.save(newSkill);
             await this.invalidateSkillsCache();
-    
+
             return { message: "Habilidad creada con éxito" };
         } catch (error) {
             console.error("Error creando habilidad:", error);
             throw new Error(error instanceof Error ? error.message : "No se pudo crear la habilidad");
         }
     }
-    
 
-    async updateSkill(
-        id: number,
-        skillData: Partial<SkillDto>,
-        file?: Express.Multer.File
-    ): Promise<{ message: string }> {
+    async createSkills(skillsData: SkillDto[]): Promise<{ message: string }> {
+        try {
+            for (const skillData of skillsData) {
+                const newSkill = SkillRepository.create(skillData);
+                await SkillRepository.save(newSkill);
+            }
+
+            await this.invalidateSkillsCache();
+
+            return { message: "Habilidades creadas con éxito" };
+        } catch (error) {
+            console.error("Error creando habilidades:", error);
+            throw new Error(error instanceof Error ? error.message : "No se pudieron crear las habilidades");
+        }
+    }
+
+    async updateSkill(id: number, skillData: Partial<SkillDto>): Promise<{ message: string }> {
         try {
             const existingSkill = await this.getSkillById(id);
             if (!existingSkill) throw new Error("Habilidad no encontrada");
-
-            if (file) {
-                const imageToDelete = existingSkill.image;
-                if (imageToDelete) {
-                    await CloudinaryService.deleteImage(imageToDelete);
-                }
-
-                const imageUrl = await CloudinaryService.uploadImage(file.path);
-                skillData.image = imageUrl;
-            }
-
             await SkillRepository.update(id, skillData);
             await this.invalidateSkillsCache();
             await this.invalidateSkillCache(id);
@@ -111,12 +110,6 @@ export class SkillService {
         try {
             const skill = await this.getSkillById(id);
             if (!skill) throw new Error("Habilidad no encontrada");
-
-            const imageToDelete = skill.image;
-            if (imageToDelete) {
-                await CloudinaryService.deleteImage(imageToDelete);
-            }
-
             await SkillRepository.remove(skill);
             await this.invalidateSkillsCache();
             await this.invalidateSkillCache(id);

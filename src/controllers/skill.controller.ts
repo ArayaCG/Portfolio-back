@@ -51,14 +51,31 @@ export const createSkill = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+export const createSkills = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const skillsData: SkillDto[] = req.body;
+
+        if (!skillsData || skillsData.length === 0) {
+            res.status(400).json({ message: "Se requieren habilidades para crear" });
+            return;
+        }
+
+        const result = await new SkillService().createSkills(skillsData);
+        res.status(201).json(result);
+    } catch (error) {
+        console.error("Error al crear habilidades:", error);
+        res.status(500).json({
+            message: error instanceof Error ? error.message : "Error al crear las habilidades",
+        });
+    }
+};
 
 export const updateSkill = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = parseInt(req.params.id);
         const skillData: Partial<SkillDto> = req.body;
-        const file = req.file;
 
-        const result = await new SkillService().updateSkill(id, skillData, file);
+        const result = await new SkillService().updateSkill(id, skillData);
         res.status(200).json(result);
     } catch (error) {
         console.error(`Error al actualizar habilidad:`, error);

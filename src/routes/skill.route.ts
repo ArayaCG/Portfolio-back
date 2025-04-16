@@ -1,7 +1,14 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/auth.middleware";
 import upload from "../config/multer.config";
-import { createSkill, deleteSkill, getSkillById, getSkills, updateSkill } from "../controllers/skill.controller";
+import {
+    createSkill,
+    createSkills,
+    deleteSkill,
+    getSkillById,
+    getSkills,
+    updateSkill,
+} from "../controllers/skill.controller";
 
 const skillRoute: Router = Router();
 
@@ -114,6 +121,47 @@ skillRoute.post("/", verifyToken, createSkill);
 
 /**
  * @swagger
+ * /api/skills/batch:
+ *   post:
+ *     summary: Crear múltiples habilidades
+ *     tags: [Skills]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 nombre:
+ *                   type: string
+ *                 imagen:
+ *                   type: string
+ *                 nombreIcono:
+ *                   type: string
+ *             example:
+ *               - nombre: "React"
+ *                 imagen: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+ *                 nombreIcono: "FaReact"
+ *               - nombre: "Vue"
+ *                 imagen: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg"
+ *                 nombreIcono: "SiVuedotjs"
+ *               # (Y aquí van los demás elementos de la lista)
+ *     responses:
+ *       201:
+ *         description: Habilidades creadas exitosamente
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error en el servidor
+ */
+skillRoute.post("/batch", verifyToken, createSkills);
+
+/**
+ * @swagger
  * /api/skills/{id}:
  *   put:
  *     summary: Actualizar una habilidad existente
@@ -129,7 +177,7 @@ skillRoute.post("/", verifyToken, createSkill);
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
@@ -139,7 +187,7 @@ skillRoute.post("/", verifyToken, createSkill);
  *                 type: string
  *               image:
  *                 type: string
- *                 format: binary
+ *                 example: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
  *     responses:
  *       200:
  *         description: Habilidad actualizada exitosamente
@@ -150,7 +198,7 @@ skillRoute.post("/", verifyToken, createSkill);
  *       500:
  *         description: Error en el servidor
  */
-skillRoute.put("/:id", verifyToken, upload.single("image"), updateSkill);
+skillRoute.put("/:id", verifyToken, updateSkill);
 
 /**
  * @swagger

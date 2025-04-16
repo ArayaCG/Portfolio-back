@@ -62,24 +62,20 @@ export class SkillService {
         }
     }
 
-    async createSkill(skillData: SkillDto, file: Express.Multer.File): Promise<{ message: string }> {
+    async createSkill(skillData: SkillDto): Promise<{ message: string }> {
         try {
-            const imageUrl = await CloudinaryService.uploadImage(file.path);
-
-            const newEducation = SkillRepository.create({
-                ...skillData,
-                image: imageUrl,
-            });
-
-            await SkillRepository.save(newEducation);
+            const newSkill = SkillRepository.create(skillData);
+    
+            await SkillRepository.save(newSkill);
             await this.invalidateSkillsCache();
-
+    
             return { message: "Habilidad creada con éxito" };
         } catch (error) {
             console.error("Error creando habilidad:", error);
-            throw new Error(error instanceof Error ? error.message : "No se puedo crear la habilidad");
+            throw new Error(error instanceof Error ? error.message : "No se pudo crear la habilidad");
         }
     }
+    
 
     async updateSkill(
         id: number,

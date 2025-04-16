@@ -90,7 +90,7 @@ skillRoute.get("/:id", getSkillById);
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
@@ -100,7 +100,7 @@ skillRoute.get("/:id", getSkillById);
  *                 type: string
  *               image:
  *                 type: string
- *                 format: binary
+ *                 example: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
  *     responses:
  *       201:
  *         description: Habilidad creada exitosamente
@@ -109,7 +109,8 @@ skillRoute.get("/:id", getSkillById);
  *       500:
  *         description: Error en el servidor
  */
-skillRoute.post("/", verifyToken, upload.single("image"), createSkill);
+
+skillRoute.post("/", verifyToken, createSkill);
 
 /**
  * @swagger

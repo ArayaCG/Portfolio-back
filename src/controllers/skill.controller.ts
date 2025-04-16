@@ -35,14 +35,13 @@ export const getSkillById = async (req: Request, res: Response): Promise<void> =
 export const createSkill = async (req: Request, res: Response): Promise<void> => {
     try {
         const skillData: SkillDto = req.body;
-        const file = req.file;
 
-        if (!file) {
-            res.status(400).json({ message: "Se requiere un archivo de imagen" });
+        if (!skillData.image) {
+            res.status(400).json({ message: "Se requiere una URL de imagen" });
             return;
         }
 
-        const result = await new SkillService().createSkill(skillData, file);
+        const result = await new SkillService().createSkill(skillData);
         res.status(201).json(result);
     } catch (error) {
         console.error("Error al crear habilidad:", error);
@@ -51,6 +50,7 @@ export const createSkill = async (req: Request, res: Response): Promise<void> =>
         });
     }
 };
+
 
 export const updateSkill = async (req: Request, res: Response): Promise<void> => {
     try {
